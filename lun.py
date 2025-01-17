@@ -1,9 +1,13 @@
+from dotenv import load_dotenv
 import requests
 from bs4 import BeautifulSoup
 import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+import os
+
+load_dotenv()
 
 knownData = []
 dp = Dispatcher()
@@ -15,7 +19,7 @@ def get_html(url):
     print(r.status_code)
 
 async def get_page_data(bot: Bot):
-    url = 'https://lun.ua/uk/search?currency=UAH&geo_id=10009580&has_eoselia=false&is_without_fee=false&price_max=13000&price_sqm_currency=UAH&section_id=2&sort=insert_time&sub_geo_id=10026629'
+    url = os.getenv('url')
     html = get_html(url)
     soup = BeautifulSoup(html, 'lxml')
     announcement = soup.find_all('div', class_='feed-layout__item-container')
@@ -51,7 +55,7 @@ async def repeated_task(bot: Bot):
         await asyncio.sleep(600)
 
 async def main() -> None:
-    bot = Bot(token="", default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    bot = Bot(token=os.getenv('token'), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     asyncio.create_task(repeated_task(bot))
     await dp.start_polling(bot)
 
