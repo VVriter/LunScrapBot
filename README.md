@@ -17,7 +17,7 @@ Copy example .env file and change variables to yours:
 cp .env.sample .env
 ```
 
-### Step 3: Enviroment
+### Step 3: Deploy
 Start docker compose and enjoy:
 ```bash
 docker-compose up -d
